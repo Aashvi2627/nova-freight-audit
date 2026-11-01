@@ -14,3 +14,6 @@
   repo; it was pasted in verbatim. That assistant's own conversation is not part of this export.
 
 There were no other sessions.
+
+- `prompt_playbook.md`: prompts I would use to review or extend the harness, written after the build. It is not part
+  of the session log and none of its prompts were sent during the build.
