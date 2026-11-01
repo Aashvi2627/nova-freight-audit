@@ -1,0 +1,12 @@
+name: DG fee billed ('Hazmat handling') where dry ice is only a refrigerant
+mailbox: evals/mailboxes/dg_dry_ice
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1008
+    class: overcharge
+  verdict: finding
+  amount_usd: '140.00'
+  action: draft:dispute
+why: 'clause 5.2: UN1845 as refrigerant does not attract the DG fee'

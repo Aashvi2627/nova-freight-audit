@@ -1,0 +1,12 @@
+name: waiver in new wording ('will not charge you ... is waived in full')
+mailbox: evals/mailboxes/waiver_new_wording
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1002
+    class: waived_but_billed
+  verdict: finding
+  amount_usd: '95.00'
+  action: draft:dispute
+why: the Credit Controller holds waivers; 'will not' must not read as a refusal

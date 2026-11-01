@@ -1,0 +1,13 @@
+name: quarterly rebate earned, not credited, past its due date
+mailbox: evals/mailboxes/rebate
+as_of: '2036-05-31'
+mode: supervised
+expect:
+  key:
+    contract_id: VMC-US-AIR-07
+    period: 2036-Q1
+    credit_type: rebate
+  verdict: finding
+  amount_usd: '1066.82'
+  action: draft:claim_credit
+why: 'QS 12,282.00 + 14,388.50 = 26,670.50 >= 20,000: 4% = 1,066.82'

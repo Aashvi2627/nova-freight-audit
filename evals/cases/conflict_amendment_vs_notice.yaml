@@ -1,0 +1,14 @@
+name: signed amendment and an authorised rate notice disagree
+mailbox: evals/mailboxes/feedback_resolve_conflict
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1030
+    class: overcharge
+  verdict: conflict
+  amount_range:
+  - '0.00'
+  - '70.20'
+  action: escalate
+why: 'clause 13.3 leaves them unranked: 60.00 freight + 10.20 fuel at 17%'

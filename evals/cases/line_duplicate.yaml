@@ -1,0 +1,12 @@
+name: freight line re-billed a month later under another label ('Express freight')
+mailbox: evals/mailboxes/line_duplicate
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1010
+    class: duplicate
+  verdict: finding
+  amount_usd: '380.00'
+  action: draft:dispute
+why: same AWB, same Annex E code, same amount; flag the later invoice

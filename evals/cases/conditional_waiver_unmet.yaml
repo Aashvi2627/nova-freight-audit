@@ -1,0 +1,10 @@
+name: conditional waiver whose condition was not met
+mailbox: evals/mailboxes/conditional_waiver_unmet
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1002
+    class: waived_but_billed
+  verdict: no_finding
+why: 'clause 11.3: paid on 2036-04-02, after the condition date'

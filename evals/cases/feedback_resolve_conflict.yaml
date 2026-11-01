@@ -1,0 +1,14 @@
+name: 'resolve_conflict says use the amendment: the conflict becomes a finding'
+mailbox: evals/mailboxes/feedback_resolve_conflict
+as_of: '2036-05-15'
+mode: supervised
+feedback:
+  batch_02: evals/feedback/resolve.json
+expect:
+  key:
+    invoice_id: VMC-36-1030
+    class: overcharge
+  verdict: finding
+  amount_usd: '70.20'
+  action: draft:dispute
+why: precedence fact for the contract and lane from 2036-04-10

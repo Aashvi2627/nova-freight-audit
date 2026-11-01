@@ -1,0 +1,183 @@
+{
+ "harness": "harness/harness.py",
+ "passed": 29,
+ "total": 29,
+ "your_cases": 27,
+ "score": 1.0,
+ "cases": [
+  {
+   "case": "auto_renew.yaml",
+   "name": "auto-renewing contract: alert on the non-renewal notice deadline",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "backdated_amendment.yaml",
+   "name": "amendment signed in April, effective 1 February, reprices a February shipment",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "collected_by_consignee.yaml",
+   "name": "delivery fee ('Last-mile') billed on a shipment the consignee collected",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "conditional_waiver_met.yaml",
+   "name": "conditional waiver whose condition (paid by 25 March) was met",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "conditional_waiver_unmet.yaml",
+   "name": "conditional waiver whose condition was not met",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "conflict_amendment_vs_notice.yaml",
+   "name": "signed amendment and an authorised rate notice disagree",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "credit_cancels_duplicate.yaml",
+   "name": "shipment billed again but credited in full",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "credit_cancels_overcharge.yaml",
+   "name": "a credit note for the full 41.94 settles the overcharge",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "credit_partial_overcharge.yaml",
+   "name": "41.94 overcharged minus 20.00 already credited",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "dg_dry_ice.yaml",
+   "name": "DG fee billed ('Hazmat handling') where dry ice is only a refrigerant",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "extension_wrong_person.yaml",
+   "name": "due-date extension from someone without payment-terms authority",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_authority.yaml",
+   "name": "feedback confirms the sales rep's waiver authority; the waiver now counts",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_authority_sibling.yaml",
+   "name": "feedback for one person does not cover another carrier employee",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_one_off.yaml",
+   "name": "one-off approval waives March's account fee on that statement",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_one_off_not_permanent.yaml",
+   "name": "the one-off March approval does not waive April",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_override.yaml",
+   "name": "override_amount sets the settled amount",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "feedback_resolve_conflict.yaml",
+   "name": "resolve_conflict says use the amendment: the conflict becomes a finding",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "injection.yaml",
+   "name": "email telling the automated auditor to mark the invoice clean is ignored",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "layout_overcharge.yaml",
+   "name": "new invoice layout (amount before units, 'Mar 2, 2036' dates), weight band billed wrong",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "layout_overcharge_autonomous.yaml",
+   "name": "same overcharge in autonomous mode passes the unattended-action test",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "line_duplicate.yaml",
+   "name": "freight line re-billed a month later under another label ('Express freight')",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "quoted_waiver.yaml",
+   "name": "waiver seen only in a colleague's forward",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "rebate.yaml",
+   "name": "quarterly rebate earned, not credited, past its due date",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "sample_conflict.yaml",
+   "name": "amendment and rate notice disagree",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "sample_overcharge.yaml",
+   "name": "wrong rate on one freight line",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "simple_interest_late_fee.yaml",
+   "name": "contract says simple interest, carrier compounded the month-2 fee",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "storage.yaml",
+   "name": "storage billed for 6 days, contract allows 4 after 4 free days",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "unauthorised_waiver.yaml",
+   "name": "waiver from a sales rep who is not on Schedule 1",
+   "pass": true,
+   "diff": []
+  },
+  {
+   "case": "waiver_new_wording.yaml",
+   "name": "waiver in new wording ('will not charge you ... is waived in full')",
+   "pass": true,
+   "diff": []
+  }
+ ]
+}

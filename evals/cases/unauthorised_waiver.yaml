@@ -1,0 +1,10 @@
+name: waiver from a sales rep who is not on Schedule 1
+mailbox: evals/mailboxes/unauthorised_waiver
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1002
+    class: waived_but_billed
+  verdict: no_finding
+why: 'clause 11.1: only a Schedule 1 waivers person can waive'

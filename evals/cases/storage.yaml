@@ -1,0 +1,12 @@
+name: storage billed for 6 days, contract allows 4 after 4 free days
+mailbox: evals/mailboxes/storage
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1005
+    class: overcharge
+  verdict: finding
+  amount_usd: '60.00'
+  action: draft:dispute
+why: 'arrived 03-04, delivered 03-12: 12 - 4 - 4 = 4 days at 30.00; billed 6'

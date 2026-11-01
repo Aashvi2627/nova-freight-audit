@@ -1,0 +1,43 @@
+{
+ "schema_version": "1.0",
+ "world": "W1",
+ "after_batch": "batch_02",
+ "decided_at": "2036-05-01T10:00:00Z",
+ "decided_by": {
+  "name": "Saoirse Lindqvist",
+  "role": "AP Manager",
+  "entity": "BKB-US"
+ },
+ "items": [
+  {
+   "item_id": "fb-ev-04",
+   "finding_key": {
+    "invoice_id": "VMC-36-1030",
+    "class": "overcharge"
+   },
+   "solicited": true,
+   "decision": "resolve_conflict",
+   "fact": {
+    "type": "precedence",
+    "subject": {
+     "contract_id": "VMC-US-AIR-07",
+     "lane": "USW3-INB2"
+    },
+    "value": {
+     "use": "amendment",
+     "amendment": "VMC-US-AIR-07/AMD-1"
+    },
+    "evidence": "Agreed with the carrier"
+   },
+   "scope": {
+    "kind": "standing",
+    "applies_to": {
+     "contract_id": "VMC-US-AIR-07",
+     "lane": "USW3-INB2"
+    },
+    "valid_from": "2036-04-10",
+    "valid_to": null
+   }
+  }
+ ]
+}

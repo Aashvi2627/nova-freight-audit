@@ -1,0 +1,14 @@
+name: override_amount sets the settled amount
+mailbox: evals/mailboxes/feedback_override
+as_of: '2036-05-15'
+mode: supervised
+feedback:
+  batch_01: evals/feedback/override.json
+expect:
+  key:
+    invoice_id: VMC-36-1001
+    class: overcharge
+  verdict: finding
+  amount_usd: '30.00'
+  action: draft:dispute
+why: fact.value.amount_usd replaces the computed 41.94

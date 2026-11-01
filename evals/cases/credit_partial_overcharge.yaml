@@ -1,0 +1,12 @@
+name: 41.94 overcharged minus 20.00 already credited
+mailbox: evals/mailboxes/credit_partial
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1001
+    class: overcharge
+  verdict: finding
+  amount_usd: '21.94'
+  action: draft:dispute
+why: 41.94 overcharged minus 20.00 already credited

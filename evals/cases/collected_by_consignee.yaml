@@ -1,0 +1,12 @@
+name: delivery fee ('Last-mile') billed on a shipment the consignee collected
+mailbox: evals/mailboxes/collected_by_consignee
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1004
+    class: overcharge
+  verdict: finding
+  amount_usd: '95.00'
+  action: draft:dispute
+why: 'clause 6.2: tracking shows COLLECTED_BY_CONSIGNEE'

@@ -1,0 +1,13 @@
+name: new invoice layout (amount before units, 'Mar 2, 2036' dates), weight band billed
+  wrong
+mailbox: evals/mailboxes/layout_overcharge
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1001
+    class: overcharge
+  verdict: finding
+  amount_usd: '41.94'
+  action: draft:dispute
+why: '120 kg is in band 50-199.5 (3.80, not 4.10): 36.00 freight + 5.94 fuel at 16.50%'

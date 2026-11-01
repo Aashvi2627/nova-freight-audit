@@ -1,0 +1,12 @@
+name: amendment signed in April, effective 1 February, reprices a February shipment
+mailbox: evals/mailboxes/backdated_amendment
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1003
+    class: overcharge
+  verdict: finding
+  amount_usd: '104.40'
+  action: draft:dispute
+why: 150 kg x (8.10 - 7.50) = 90.00 freight + 14.40 fuel at 16.00%

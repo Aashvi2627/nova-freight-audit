@@ -1,0 +1,10 @@
+name: shipment billed again but credited in full
+mailbox: evals/mailboxes/credit_cancels_duplicate
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1009
+    class: duplicate
+  verdict: no_finding
+why: credited in full and billed again is fine

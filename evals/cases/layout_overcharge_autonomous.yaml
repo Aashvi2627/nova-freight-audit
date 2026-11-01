@@ -1,0 +1,12 @@
+name: same overcharge in autonomous mode passes the unattended-action test
+mailbox: evals/mailboxes/layout_overcharge
+as_of: '2036-04-30'
+mode: autonomous
+expect:
+  key:
+    invoice_id: VMC-36-1001
+    class: overcharge
+  verdict: finding
+  amount_usd: '41.94'
+  action: execute:dispute
+why: tracking pickup, signed MSA rate, under 5,000, Schedule 1 disputes contact

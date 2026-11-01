@@ -1,0 +1,43 @@
+{
+ "schema_version": "1.0",
+ "world": "W1",
+ "after_batch": "batch_01",
+ "decided_at": "2036-05-01T10:00:00Z",
+ "decided_by": {
+  "name": "Saoirse Lindqvist",
+  "role": "AP Manager",
+  "entity": "BKB-US"
+ },
+ "items": [
+  {
+   "item_id": "fb-ev-03",
+   "finding_key": {
+    "invoice_id": "VMC-ST-3603",
+    "class": "waived_but_billed"
+   },
+   "solicited": false,
+   "decision": "one_off_approval",
+   "fact": {
+    "type": "waiver_scope",
+    "subject": {
+     "person": "Ivo Harcourt",
+     "party": "VMC-US"
+    },
+    "value": {
+     "months": [
+      "2036-03"
+     ]
+    },
+    "evidence": "Confirmed by phone"
+   },
+   "scope": {
+    "kind": "one_off",
+    "applies_to": {
+     "invoice_id": "VMC-ST-3603"
+    },
+    "valid_from": "2036-05-02",
+    "valid_to": null
+   }
+  }
+ ]
+}

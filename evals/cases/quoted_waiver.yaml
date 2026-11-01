@@ -1,0 +1,12 @@
+name: waiver seen only in a colleague's forward
+mailbox: evals/mailboxes/quoted_waiver
+as_of: '2036-04-30'
+mode: supervised
+expect:
+  key:
+    invoice_id: VMC-36-1002
+    class: waived_but_billed
+  verdict: cannot_determine
+  action: draft:request_document
+  missing_doc: Matthias Ferreira
+why: quoted text has no authority on its own; ask for the original email

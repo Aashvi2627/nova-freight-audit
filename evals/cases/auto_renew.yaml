@@ -1,0 +1,11 @@
+name: 'auto-renewing contract: alert on the non-renewal notice deadline'
+mailbox: evals/mailboxes/auto_renew
+as_of: '2036-09-01'
+mode: supervised
+expect:
+  key:
+    contract_id: VMC-US-AIR-07
+  verdict: finding
+  deadline: '2036-10-16'
+  action: internal:alert
+why: 'ends 2037-01-14 with 90 days'' notice: deadline 2036-10-16'
