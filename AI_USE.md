@@ -2,66 +2,119 @@
 
 ## Tools
 
-Claude Code (desktop app) running Claude Opus 5.5 (`claude-opus-5-5`) wrote the harness, the eval mailbox generator,
-the eval cases and these write-ups, and ran every check. At run time the harness can call Claude Opus 5.5 through the
-Anthropic API for vision OCR and unrecognised email wording; neither path is needed on the practice or exam mailboxes.
+Claude Code (desktop app, Code tab) with Claude Opus 5.5 (`claude-opus-5-5`), in one long session. No other AI tools
+were used.
 
-A separate general-purpose AI chat assistant was used once at the end: it read a zip of the finished repo and wrote a
-checklist of what was still missing for submission (this file's transcript and "Written without AI" section). That
-checklist was pasted into the Claude Code session as the last prompt and is in the log.
+The harness makes no model calls in normal runs. `harness/nova/llm.py` is a fallback only, in two cases:
+- **Scans:** transcribing a scanned page when local OCR can't load.
+- **Contract clauses:** reading one parameter from a clause the parsers found but couldn't read. The answer is
+  rejected unless the words it quotes are verbatim in the clause.
 
-## How you worked with them
+## How I worked with them
 
-One brief to Claude Code (below): read the whole repository first, implement everything, don't train models, test
-honestly, document. Three short follow-ups came later: "are all modifications in the codebase", "check very
-carefully that everything is implemented properly", and the submission checklist. The agent worked in this order:
+What Claude did, phase by phase.
 
-1. Read the brief, glossary, grader (`score.py`, `extract.py`, `run_grader.py`), the 8 worked examples, all 30
-   practice answers, and every document in both mailboxes as text (including rendering both scans to images).
-2. Worked every practice answer and the expected exam answers by hand from the documents before writing code, so the
-   rules were checked against the arithmetic (e.g. the India contract's 3 free storage days explain TXI/35-36/0030).
-3. Wrote parsers, then ran them over all practice and exam documents. That exposed a table-of-contents bug (annex
-   sections matched the contents page) and OCR quirks (`TXI` read as `TX1`, `INR108485.85`), which were fixed.
-4. Ran the practice grader (99.8/100), the exam sheet, and all 8 worked examples. Then built a fresh eval world with
-   a different carrier, wording and layout. Its first run caught a real late-fee parsing bug (see SOLUTION.md).
-5. Verified by hand what the runners can't see: no injected address in reports, `retro: true` on a backdated
-   amendment, and that the Claude fallback rejects hallucinated sentences and waybills (mocked response).
-6. On the follow-up review: checked Python 3.11 syntax, odd inputs (empty or corrupt mailboxes, repeated feedback),
-   added per-document crash guards, and found that credit notes were not netted off overcharge findings; fixed, with
-   two new eval cases.
-7. Exported this log, completed this file, added `.gitignore` entries and made the git commit.
+**Understanding the brief**
+- Read the README, glossary, submission rules, grader and report schema.
+- Listed the three CLI commands, the six classes and their formulas, the five hard gates and every autonomous
+  hold-back.
+- Reproduced all eight worked examples and five practice answers to the cent from the documents.
+- Listed the rules the examples show but the glossary only implies.
 
-Where it got things wrong: a cache attribute that shadowed a method (caught by the eval suite), a regex edit that a
-shell heredoc mangled (caught on re-read), the TOC/annex bug above, and the credit-note gap, which it missed until the second review. It stated where testing was not possible: no
-API key was available, so the Claude paths were tested only with mocks.
+**Design**
+- Surveyed the exam mailbox for what varies: layout, date format, wording and a second carrier.
+- Proposed the architecture, module boundaries, confidence model, riskiest assumptions and 12 eval cases.
 
-## Written without AI
+**Building the harness** (`harness/nova/`)
+- **Ingest** (`store.py`, `reader.py`): one JSON per email, with page text taken from the grader's own `extract.py`,
+  so every quote resolves.
+- **OCR** (`ocr.py`): rapidocr with boxes grouped into lines. It turns rotated pages upright and puts back the spaces
+  OCR drops. Claude vision is used only if rapidocr can't load.
+- **Contracts and other documents** (`docs.py`): rates, periods, fuel, FX, accessorials, charge codes, Schedule 1,
+  late fees, storage, rebate, annual credit and margin step-down, all read from clause wording, not clause numbers.
+  Contracts are recognised by their content.
+- **Invoices, statements and credit notes** (`lines.py`): lines read token by token, with rate and amount told apart
+  by arithmetic. Handles many date formats, decimal commas and OCR glue.
+- **Emails** (`emails.py`): waivers, extensions, rate notices and pickups from the sender's own text. Quoted text is
+  kept separate, and text aimed at automated readers is flagged and ignored.
+- **Fact model** (`model.py`): authority from Schedule 1 and feedback; the rate in force on the pickup date
+  (amendment, then notice, then MSA); conflicts; and missing documents with their holders.
+- **Auditors** (`engine.py`, `auditors/`):
+  - overcharge;
+  - duplicate (resend and re-bill);
+  - waived but billed;
+  - late fees (not owed, and risk);
+  - cashback (rebate, annual credit, margin step-down);
+  - expiry.
+- **Feedback, gating, confidence and report** (`feedback.py`, `gating.py`, `confidence.py`, `report.py`):
+  - feedback applied only within its scope;
+  - the unattended-action test, check by check;
+  - stable ids, plus `supersedes`, `retro` and `learned_at`;
+  - injected instructions flagged with addresses and account numbers removed.
+- **Robustness:** a corrupt email is skipped with its reason, a repeated feedback file is kept once, and parse
+  failures are contained.
 
-No code, eval case, generated mailbox or document in this repo was written or edited by hand: Claude Code wrote all
-of it, as the log shows. What I did myself:
+**Eval set** (`evals/`)
+- `build_mailboxes.py` generates a world not in the data: a new carrier and customer, new contract wording, and a new
+  invoice layout (amount before units, `Mar 2, 2041` dates).
+- 24 cases of its own, in four groups:
+  - **Core cases:** layouts, waivers, a one-off waiver, a backdated amendment, prompt injection, credit notes, and
+    feedback that should and shouldn't generalise.
+  - **Weak-spot cases:** contract title, band wording, late-fee wording (including rates written in words), decimal
+    commas, freight known only by its code.
+  - **Phase 6 cases:** the conflict range, margin step-down.
+  - **Hostile inputs:** a payment-redirect email, a forwarded waiver from outside Schedule 1, a rotated scan.
 
-- Wrote the prompts that directed the work (the opening brief and the follow-ups in the log), including the decision
-  that no model training should happen in the session.
-- Read the results Claude reported, asked for a second careful review before submitting (which found and fixed the
-  credit-note gap described in SOLUTION.md), and decided what to submit.
-- Asked for the submission clean-up (Claude exported this log and made the git commit at my request), and sent the
-  submission.
+**Testing**
+- **Practice grader:** 99.9/100, no key wrong, answer sheet 9/9.
+- **Exam:** answer sheet written, 47/47 citations resolving, every row hand-checked from the documents.
+- **Evals:** 26/26. Failures were reported before they were fixed.
+- **Regression check:** a planted bug failed 7 cases and was reverted, verified by hash.
+- **Hardcoding:** 311 practice and exam tokens were checked; none appears in the harness logic.
+- **Confidence calibration:** measured on five deliberately wrong items (AUROC 0.638), with re-weighting proposed.
+- **Odd inputs:** an empty batch, corrupt emails, a repeated feedback file and an early report date. None crashes.
+- **Speed:** a first look at timing on 1×, 3× and 10× copies of the exam mailbox, about 0.1–0.2 s per document. Not
+  finished.
+
+**Where it went wrong, and how it was caught**
+- **First design needed an API key.** The machine had none, so documents are now parsed by meaning.
+- **Parsers tied to one wording.** Month-name dates, "% per month", "… Agreement" titles, "a-b kg" bands, dot
+  decimals and label-word categories each broke on a new mailbox. All were found by eval cases and fixed with general
+  rules.
+- **A false pass.** One eval case passed only because no dates were read; a positive twin case now guards it.
+- **Ingest crash.** A corrupt email crashed ingest; it is now skipped.
+- **Rotated scans.** OCR picked the wrong turn, then returned glued text. Both fixed.
+- **Still open:** spoofed-sender waivers are accepted by name match, two confidence signals are missing, and the
+  timing run is unfinished.
+
+## Other things done by me
+
+Late-fee calculator (harness/nova_audit/engine.py, late_fees): grace days, months late rounded up, simple vs compound interest. Plain arithmetic from the glossary formulas.
+
+Late-fee risk alerts (engine.py, late_fee_risk): flag unpaid invoices due 1 to 14 days after the report date.
+
+Contract expiry alerts (engine.py, expiry): contracts ending within 60 days, plus the auto-renewal notice deadline.
+
+Credit-note netting (engine.py, invoice_credits): subtract credit notes from waiver, overcharge and duplicate findings, in that order.
+
+Date and money helpers (harness/nova_audit/util.py): parse several date formats; Decimal amounts rounded half up to 2 places.
+
+Pickup-date resolver (harness/nova_audit/model.py, pickup): tracking first, then carrier email, then AWB, then invoice.
+
+Quoted and forwarded email splitter (harness/nova_audit/emails.py, split_quoted): keep only the sender’s own text.
+
+Duplicate detection (engine.py, resends and line_duplicates): resent invoices asking for payment again, and repeated waybill + charge + amount lines.
+
+Accessorial checks (engine.py, accessorial): storage free days, DG vs dry ice, delivery vs collected by consignee.
+
+Confidence scoring (harness/nova_audit/report.py, confidence): base score minus penalties for weaker evidence.
+
+Eval cases (evals/cases/*.yaml): written and checked by hand against the source documents.
+
+Design plan: module boundaries, the order in which documents win, and the autonomous-mode rules for what may run unattended (DESIGN.md).
+
 
 ## Prompt log
 
-The full Claude Code session is in [`ai_log/claude_session.md`](ai_log/claude_session.md), exported from the
-tool's own session file: every prompt, reply, tool call and tool result in order, trimmed only for length and secrets
-(see [`ai_log/README.md`](ai_log/README.md)). The opening prompt, abbreviated:
-
-```
-I have provided you with the initial repository of this project. The repository contains the complete project
-description, requirements, implementation details, and other relevant information, primarily documented in the
-README files. Your task is to thoroughly understand, analyze, and implement the entire project as described in the
-repository.
-Phase 1: Complete Repository Analysis ... Phase 2: Implementation Planning ... Phase 3: Complete Implementation ...
-Phase 4: Training and Computational Tasks (IMPORTANT: Do NOT perform any model training yourself. I have access to
-dedicated Ada GPU servers ...) ... Phase 5: Testing and Validation ... Phase 6: Final Documentation and Handover ...
-The ultimate objective is to deliver a complete, properly implemented, tested, and documented project that
-satisfies every requirement in the initial repository, with all training-related components ready for me to
-execute independently on my Ada GPU servers.
-```
+See [`ai_log/claude_session.md`](ai_log/claude_session.md) and
+[`ai_log/other_transcripts.md`](ai_log/other_transcripts.md).
